@@ -168,6 +168,31 @@ poetry run flake8 drug_mentions_pipeline tests
 4. **Journalisation Propre** : Journalisation complète tout au long de la pipeline.
 5. **Configuration Facile** : Configuration centralisée pour tous les chemins de fichiers et paramètres.
 
+## Utilisation avec Docker
+
+Ce projet peut être exécuté dans un conteneur Docker, ce qui simplifie l'installation et garantit un environnement d'exécution cohérent.
+
+### Prérequis
+
+- [Docker](https://docs.docker.com/get-docker/)
+- [Docker Compose](https://docs.docker.com/compose/install/) (généralement inclus avec Docker Desktop)
+
+### Exécution avec Docker Compose
+
+Pour exécuter la pipeline complète :
+```bash
+docker-compose up pipeline
+```
+
+Pour analyser les journaux qui mentionnent le plus de médicaments :
+```bash
+docker-compose up analyze
+```
+
+Les résultats seront générés dans le répertoire `data/output/` de votre machine locale.
+
+Pour plus de détails sur l'utilisation avec Docker, consultez la [Documentation Docker](Documentation-Docker.md).
+
 ## Contribution au Projet
 
 Pour contribuer à ce projet :
