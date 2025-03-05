@@ -1,0 +1,29 @@
+[tool.poetry]
+name = "drug-mentions-pipeline"
+version = "0.1.0"
+description = "A pipeline for detecting drug mentions in scientific publications and clinical trials"
+authors = ["Diwal <walid.sc@gmail.com>"]
+readme = "README.md"
+packages = [{include = "drug_mentions_pipeline"}]
+
+[tool.poetry.dependencies]
+python = "^3.13"
+pandas = "^2.2.3"
+pytest = "^8.3.5"
+
+[tool.poetry.group.dev.dependencies]
+flake8 = "^6.0.0"
+black = "^23.0.0"
+
+[tool.poetry.scripts]
+run-pipeline = "drug_mentions_pipeline.main:main"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 88
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
