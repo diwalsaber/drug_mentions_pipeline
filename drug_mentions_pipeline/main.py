@@ -103,5 +103,36 @@ def main():
     run_pipeline()
 
 
+def analyze_top_journal(input_file=None):
+    """
+    Analyse le fichier de sortie pour trouver le journal avec le plus de médicaments différents.
+
+    Args:
+        input_file (str, optional): Chemin vers le fichier JSON à analyser.
+            Si None, utilise le fichier de sortie par défaut.
+    """
+    logger = setup_logging()
+    from drug_mentions_pipeline.config import OUTPUT_FILE
+    from drug_mentions_pipeline.features import find_journal_with_most_drugs
+
+    input_file = input_file or OUTPUT_FILE
+    logger.info(f"Lancement de l'analyse du fichier {input_file}")
+
+    try:
+        journal_name, drug_count, drug_list = find_journal_with_most_drugs(input_file)
+        if journal_name:
+            logger.info("=" * 50)
+            logger.info(f"Le journal qui mentionne le plus de médicaments différents est:")
+            logger.info(f"  {journal_name}")
+            logger.info(f"  avec {drug_count} médicaments différents:")
+            for drug in sorted(drug_list):
+                logger.info(f"    - {drug}")
+            logger.info("=" * 50)
+        else:
+            logger.warning("Aucun journal trouvé dans les données.")
+    except Exception as e:
+        logger.error(f"L'analyse a échoué: {e}")
+
+
 if __name__ == "__main__":
     main()

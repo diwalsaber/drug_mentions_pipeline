@@ -17,6 +17,7 @@ black = "^23.0.0"
 
 [tool.poetry.scripts]
 run-pipeline = "drug_mentions_pipeline.main:main"
+analyze-journals = "drug_mentions_pipeline.main:analyze_top_journal"
 
 [build-system]
 requires = ["poetry-core"]
