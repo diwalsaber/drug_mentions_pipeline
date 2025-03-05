@@ -76,6 +76,26 @@ Ou directement avec Python :
 # Depuis le répertoire racine du projet
 python -m drug_mentions_pipeline.main
 ```
+### Analyse des journaux scientifiques
+
+Après avoir exécuté la pipeline, vous pouvez analyser les données pour identifier le journal scientifique qui mentionne le plus de médicaments différents :
+
+```bash
+# Depuis le répertoire racine du projet
+poetry run analyze-journals
+```
+
+Cette commande analyse le fichier JSON généré par la pipeline et affiche :
+- Le nom du journal qui mentionne le plus de médicaments différents
+- Le nombre total de médicaments différents mentionnés
+- La liste complète des médicaments mentionnés par ce journal
+
+Vous pouvez également analyser un fichier JSON spécifique en le passant en paramètre à la commande d'analyse :
+
+```bash
+# Pour analyser un fichier JSON spécifique
+python -m drug_mentions_pipeline.main analyze_top_journal chemin/vers/fichier.json
+```
 
 ### Résultat
 
