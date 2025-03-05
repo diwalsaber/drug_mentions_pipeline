@@ -1,0 +1,16 @@
+
+services:
+  pipeline:
+    build: .
+    volumes:
+      - ./data/input:/app/data/input
+      - ./data/output:/app/data/output
+    command: "run_pipeline"
+
+  analyze:
+    build: .
+    volumes:
+      # Montage des répertoires de données pour permettre l'accès aux fichiers locaux
+      - ./data/input:/app/data/input
+      - ./data/output:/app/data/output
+    command: "analyze_top_journal"
