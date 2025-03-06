@@ -135,4 +135,9 @@ def analyze_top_journal(input_file=None):
 
 
 if __name__ == "__main__":
-    main()
+    import sys
+    
+    if len(sys.argv) > 1 and sys.argv[1] == "analyze_top_journal":
+        analyze_top_journal()
+    else:
+        main()  # Exécute la pipeline complète par défaut

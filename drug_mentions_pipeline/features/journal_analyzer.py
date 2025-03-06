@@ -32,7 +32,7 @@ def find_journal_with_most_drugs(json_file_path):
             drug_name = drug_entry['drug']
             for mention in drug_entry['mentions']:
                 journal_name = mention['journal']
-                # Ajouter ce médicament à l'ensemble des médicaments mentionnés par ce journal
+                # Ajouter ce médicament à l'ensemble des médicaments mentionés par ce journal
                 journal_drugs[journal_name].add(drug_name)
 
         # Trouver le journal avec le plus grand nombre de médicaments différents
