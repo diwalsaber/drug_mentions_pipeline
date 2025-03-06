@@ -262,3 +262,40 @@ Pour gérer efficacement des millions de fichiers, une architecture plus orient�
 ## Conclusion
 
 L'architecture globale et les stratégies de traitement doivent être adaptées vers une approche distribuée et une architecture modulaire pour gérer efficacement des données à l'échelle du téraoctet ou des millions de fichiers.
+
+
+# SQL
+## Première partie
+
+```SQL
+SELECT 
+    date AS date,
+    SUM(prod_price * prod_qty) AS ventes
+FROM 
+    TRANSACTIONS
+WHERE 
+    date BETWEEN '2019-01-01' AND '2019-12-31'
+GROUP BY 
+    date
+ORDER BY 
+    date;
+```
+
+## Deuxième partie
+
+```SQL
+SELECT
+    t.client_id AS client_id,
+    SUM(CASE WHEN pn.product_type = 'MEUBLE' THEN t.prod_price * t.prod_qty ELSE 0 END) AS ventes_meuble,
+    SUM(CASE WHEN pn.product_type = 'DECO' THEN t.prod_price * t.prod_qty ELSE 0 END) AS ventes_deco
+FROM
+    TRANSACTIONS t
+JOIN
+    PRODUCT_NOMENCLATURE pn ON t.prod_id = pn.product_id
+WHERE
+    t.date BETWEEN '2019-01-01' AND '2019-12-31'
+GROUP BY
+    t.client_id
+ORDER BY
+    t.client_id;
+```
