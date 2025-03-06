@@ -203,3 +203,62 @@ Pour contribuer à ce projet :
 4. Soumettez une pull request
 
 Le formatage du code suit le guide de style Black.
+
+# Gestion de grandes volumétries de données
+
+## 1. Éléments à considérer pour gérer de grosses volumétries
+
+Avec notre migration vers Polars, nous avons déjà accompli un premier pas important vers la gestion de grandes volumétries de données. Cependant, pour traiter efficacement des fichiers de plusieurs To ou des millions de fichiers, plusieurs éléments clés doivent être considérés:
+
+### 1.1 Traitement par lots (Chunking)
+
+Pour les jeux de données massifs, charger toutes les données en mémoire n'est pas viable. Le traitement par lots permet de diviser les données en segments gérables:
+
+```python
+import polars as pl
+
+def process_large_csv(file_path, batch_size=100_000):
+    for batch in pl.read_csv_batched(file_path, batch_size=batch_size):
+        # Traiter chaque lot
+        process_batch(batch)
+```
+
+### 1.2 Formats de fichiers optimisés
+
+Dans la mesure du possible, et suivant les contraintes métier et techniques on pourrait avant ou pendant l'ingestion convertir les CSV ou JSON vers du Parquet. Format colonne beaucoup plus efficace pour les grandes volumétries et "Spark-ready":
+
+```python
+# Conversion des données en format Parquet
+pl.read_csv("large_file.csv").write_parquet("optimized_file.parquet")
+
+# Lecture sélective de colonnes
+df = pl.read_parquet("optimized_file.parquet", columns=["id", "drug"])
+```
+
+### 1.3 Parallélisation et multiprocessing
+
+Polars utilise déjà un traitement parallèle interne, mais pour traiter des millions de fichiers il pourrait être pertinent d'utiliser le multiprocessing.
+
+
+## 2. Modifications pour supporter les grandes volumétries
+
+### 2.1 Refonte de l'extraction des données
+
+Le module d'extraction actuel doit être modifié pour prendre en charge le traitement par lots et les formats optimisés.
+
+```python
+def extract_large_csv(file_path, batch_size=100_000):
+    # Traiter le CSV par lots et convertir en Parquet
+```
+
+### 2.3 Intégration avec des systèmes distribuées
+
+L'accès aux fichiers peut devenir un goulot d'étranglement avec des millions de fichiers. Donc pour des volumétries vraiment massives, l'intégration avec des frameworks distribués comme Spark devient nécessaire.
+
+### 2.4 Architecture modulaire et extensible
+
+Pour gérer efficacement des millions de fichiers, une architecture plus orienté objet avec => "une tâche = un module"
+
+## Conclusion
+
+L'architecture globale et les stratégies de traitement doivent être adaptées vers une approche distribuée et une architecture modulaire pour gérer efficacement des données à l'échelle du téraoctet ou des millions de fichiers.
