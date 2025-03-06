@@ -2,7 +2,7 @@
 Main entry point for the drug mentions pipeline.
 """
 import json
-import pandas as pd
+import polars as pl
 from pathlib import Path
 from drug_mentions_pipeline.config import (
     DRUGS_PATH, 
@@ -77,7 +77,7 @@ def run_pipeline(
     )
 
     # Combine PubMed mentions
-    mentions_pubmed = pd.concat([mentions_pubmed_csv, mentions_pubmed_json], ignore_index=True)
+    mentions_pubmed = pl.concat([mentions_pubmed_csv, mentions_pubmed_json])
 
     # II.3 Transform - Clinical Trials
     mentions_clinical = detect_drug_mentions(

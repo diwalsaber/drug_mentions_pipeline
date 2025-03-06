@@ -1,52 +1,40 @@
 import logging
-import pandas as pd
+import polars as pl
 
 logger = logging.getLogger(__name__)
 
-
 def detect_drug_mentions(
-        df_publications: pd.DataFrame,
-        df_drugs: pd.DataFrame,
+        df_publications: pl.DataFrame,
+        df_drugs: pl.DataFrame,
         title_col: str
-) -> pd.DataFrame:
+) -> pl.DataFrame:
     """
-    Détecte pour chaque ligne de df_publications si un drug est mentionné 
-    dans title_col.
-    Retourne un DataFrame avec colonnes:
-      [id_publication, drug, journal, date]
-
-    Args:
-        df_publications (pd.DataFrame): 
-        Contient au minimum: [id, journal, date, <title_col>].
-        df_drugs (pd.DataFrame): Contient au minimum: [drug].
-        title_col (str): Nom de la colonne du titre dans df_publications 
-        (ex. "title" ou "scientific_title").
-
-    Returns:
-        pd.DataFrame
+    Détecte les mentions de médicaments dans les publications et retourne un DataFrame
+    avec les colonnes [publication_id, drug, journal, date].
+    
+    Optimisé avec des opérations Polars vectorisées pour une meilleure performance.
     """
-    results = []
-    # Conversion en minuscule avant comparaison
-    df_drugs["drug_lower"] = df_drugs["drug"].str.lower()
+    # Normalisation en minuscules
+    drugs_normalized = df_drugs.with_columns(
+        pl.col("drug").str.to_lowercase().alias("drug_term")
+    )
+    
+    publications_normalized = df_publications.with_columns(
+        pl.col(title_col).str.to_lowercase().alias("title_processed")
+    )
 
-    df_publications["title_lower"] = df_publications[title_col].str.lower()
-
-    for _, pub_row in df_publications.iterrows():
-        title_text = pub_row["title_lower"]
-        publication_id = pub_row["id"]
-        journal_name = pub_row["journal"]
-        pub_date = pub_row["date"]
-
-        for _, drug_row in df_drugs.iterrows():
-            drug_name = drug_row["drug"]
-            drug_lower = drug_row["drug_lower"]
-
-            if drug_lower in title_text:
-                results.append({
-                    "publication_id": publication_id,
-                    "drug": drug_name,
-                    "journal": journal_name,
-                    "date": pub_date
-                })
-
-    return pd.DataFrame(results)
+    # Jointure croisée, filtrage des mentions et sélection des colonnes
+    return (
+        publications_normalized
+        .join(drugs_normalized, how="cross")
+        .filter(
+            pl.col("title_processed").str.contains(pl.col("drug_term"))
+        )
+        .select(
+            pl.col("id").alias("publication_id"),
+            pl.col("drug"),  # Nom original du médicament
+            "journal",
+            "date"
+        )
+        .unique()  # Élimine les doublons potentiels
+    )

@@ -3,13 +3,13 @@ Functions for extracting data from CSV and JSON files.
 """
 import re
 import json
-import pandas as pd
+import polars as pl
 import logging
 
 logger = logging.getLogger(__name__)
 
 
-def extract_csv(file_path: str) -> pd.DataFrame:
+def extract_csv(file_path: str) -> pl.DataFrame:
     """
     Extract data from a CSV file and return a pandas DataFrame.
 
@@ -17,10 +17,10 @@ def extract_csv(file_path: str) -> pd.DataFrame:
         file_path (str): The full path to the CSV file.
 
     Returns:
-        pd.DataFrame: The data as a DataFrame.
+        pl.DataFrame: The data as a DataFrame.
     """
     try:
-        df = pd.read_csv(file_path)
+        df = pl.read_csv(file_path)
         logger.info(f"CSV file loaded: {file_path} with {len(df)} rows.")
         return df
     except Exception as e:
@@ -28,7 +28,7 @@ def extract_csv(file_path: str) -> pd.DataFrame:
         raise
 
 
-def extract_json(file_path: str) -> pd.DataFrame:
+def extract_json(file_path: str) -> pl.DataFrame:
     """
     Extract data from a JSON file and return a pandas DataFrame.
 
@@ -45,7 +45,7 @@ def extract_json(file_path: str) -> pd.DataFrame:
         # Fix trailing commas in JSON if they exist
         data_cleaned = re.sub(r',(\s*[\]}])', r'\1', data)
         data_json = json.loads(data_cleaned)
-        df = pd.DataFrame(data_json)
+        df = pl.DataFrame(data_json)
         logger.info(f"JSON file loaded: {file_path} with {len(df)} rows.")
         return df
     except Exception as e:

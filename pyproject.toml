@@ -8,7 +8,7 @@ packages = [{include = "drug_mentions_pipeline"}]
 
 [tool.poetry.dependencies]
 python = "^3.13"
-pandas = "^2.2.3"
+polars = "^1.24.0"
 pytest = "^8.3.5"
 
 [tool.poetry.group.dev.dependencies]
