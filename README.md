@@ -164,9 +164,9 @@ poetry run flake8 drug_mentions_pipeline tests
 
 1. **Extraction de Données** : Lecture des données sur les médicaments, publications et essais cliniques depuis des sources CSV et JSON.
 2. **Détection de Mentions de Médicaments** : Identification des noms de médicaments dans les titres de publications.
-3. **Construction de Graphe** : Création d'une structure de graphe reliant les médicaments à leurs mentions.
-4. **Journalisation Propre** : Journalisation complète tout au long de la pipeline.
-5. **Configuration Facile** : Configuration centralisée pour tous les chemins de fichiers et paramètres.
+3. **Construction du Graphe** : Création d'une structure de graphe reliant les médicaments à leurs mentions.
+4. **Journalisation** : Journalisation complète tout au long de la pipeline.
+5. **Configuration** : Configuration centralisée pour tous les chemins de fichiers et paramètres.
 
 ## Utilisation avec Docker
 
@@ -175,7 +175,7 @@ Ce projet peut être exécuté dans un conteneur Docker, ce qui simplifie l'inst
 ### Prérequis
 
 - [Docker](https://docs.docker.com/get-docker/)
-- [Docker Compose](https://docs.docker.com/compose/install/) (généralement inclus avec Docker Desktop)
+- [Docker Compose](https://docs.docker.com/compose/install/)
 
 ### Exécution avec Docker Compose
 
