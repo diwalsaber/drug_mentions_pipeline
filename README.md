@@ -63,7 +63,7 @@ Placez vos fichiers d'entrée dans le répertoire `data/input/` :
 - `pubmed.json` : Publications PubMed au format JSON
 - `clinical_trials.csv` : Données d'essais cliniques
 
-### Exécution de la pipeline
+### Exécution de la pipeline et construction du graph
 
 Avec Poetry :
 ```bash
@@ -76,6 +76,10 @@ Ou directement avec Python :
 # Depuis le répertoire racine du projet
 python -m drug_mentions_pipeline.main
 ```
+### Résultat
+
+La pipeline génère un fichier JSON (`data/output/drug_graph.json`) qui contient la structure en graphe des médicaments et leurs mentions dans les publications et essais cliniques.
+
 ### Analyse des journaux scientifiques
 
 Après avoir exécuté la pipeline, vous pouvez analyser les données pour identifier le journal scientifique qui mentionne le plus de médicaments différents :
@@ -96,10 +100,20 @@ Vous pouvez également analyser un fichier JSON spécifique en le passant en par
 # Pour analyser un fichier JSON spécifique
 python -m drug_mentions_pipeline.main analyze_top_journal chemin/vers/fichier.json
 ```
-
 ### Résultat
 
-La pipeline génère un fichier JSON (`data/output/drug_graph.json`) qui contient la structure en graphe des médicaments et leurs mentions dans les publications et essais cliniques.
+```bash
+2025-03-07 10:10:38 analyze-1  | 2025-03-07 09:10:38,511 - drug_mentions_pipeline - INFO - Lancement de l'analyse du fichier /app/data/output/drug_graph.json
+2025-03-07 10:10:38 analyze-1  | 2025-03-07 09:10:38,511 - drug_mentions_pipeline.features.journal_analyzer - INFO - Analyse du fichier /app/data/output/drug_graph.json pour trouver le journal avec le plus de médicaments
+2025-03-07 10:10:38 analyze-1  | 2025-03-07 09:10:38,512 - drug_mentions_pipeline.features.journal_analyzer - INFO - Journal avec le plus de médicaments: The journal of maternal-fetal & neonatal medicine (2 médicaments)
+2025-03-07 10:10:38 analyze-1  | 2025-03-07 09:10:38,512 - drug_mentions_pipeline - INFO - ==================================================
+2025-03-07 10:10:38 analyze-1  | 2025-03-07 09:10:38,512 - drug_mentions_pipeline - INFO - Le journal qui mentionne le plus de médicaments différents est:
+2025-03-07 10:10:38 analyze-1  | 2025-03-07 09:10:38,512 - drug_mentions_pipeline - INFO -   The journal of maternal-fetal & neonatal medicine
+2025-03-07 10:10:38 analyze-1  | 2025-03-07 09:10:38,512 - drug_mentions_pipeline - INFO -   avec 2 médicaments différents:
+2025-03-07 10:10:38 analyze-1  | 2025-03-07 09:10:38,512 - drug_mentions_pipeline - INFO -     - ATROPINE
+2025-03-07 10:10:38 analyze-1  | 2025-03-07 09:10:38,512 - drug_mentions_pipeline - INFO -     - BETAMETHASONE
+2025-03-07 10:10:38 analyze-1  | 2025-03-07 09:10:38,512 - drug_mentions_pipeline - INFO - ====================================
+```
 
 ## Configuration
 
